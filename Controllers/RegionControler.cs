@@ -1,5 +1,6 @@
 using System.Security.Permissions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebApiNet7._0.Controllers;
 
@@ -12,7 +13,7 @@ public class RegionController : ControllerBase
         this.dbContext=dbContext;
     }
     [HttpGet]
-    public IActionResult GetAll(){
+    public async Task<IActionResult> GetAll(){
         /*
         #region Feed Data
                   var regions=new List<Region>
@@ -32,7 +33,7 @@ public class RegionController : ControllerBase
         };  
         #endregion
         */       
-        var regions=dbContext.Regions.ToList();
+        var regions= await dbContext.Regions.ToListAsync();
         var regionsDto=new List<RegionDto>();
         foreach(var region in regions){
             regionsDto.Add(
@@ -42,8 +43,8 @@ public class RegionController : ControllerBase
     }
     [HttpGet]
     [Route("{id:Guid}")]
-    public IActionResult GetById([FromRoute] Guid id){
-        var region=dbContext.Regions.FirstOrDefault(x=>x.Id==id);
+    public async Task<IActionResult> GetById([FromRoute] Guid id){
+        var region = await dbContext.Regions.FirstOrDefaultAsync(x=>x.Id==id);
         var regionDto=new RegionDto()
         {
             Id=region.Id,Code=region.Code,Name=region.Name,RegionImageUrl=region.RegionImageUrl
@@ -54,14 +55,14 @@ public class RegionController : ControllerBase
         return Ok(regionDto);
     }
     [HttpPost]
-    public IActionResult Create([FromBody] AddRegionRequestDto addRegionRequestDto){
+    public async Task <IActionResult> Create([FromBody] AddRegionRequestDto addRegionRequestDto){
         //Map or Convert DTO to Domain model
         var regionDomainModel=new Region{
             Code=addRegionRequestDto.Code,Name=addRegionRequestDto.Name,RegionImageUrl=addRegionRequestDto.RegionImageUrl
         };
         //Use domain model to create Region
-        dbContext.Regions.Add(regionDomainModel);
-        dbContext.SaveChanges();
+        await dbContext.Regions.AddAsync(regionDomainModel);
+        await dbContext.SaveChangesAsync();
         //Map domain mdoel back to DTO
         var regionDto=new RegionDto{
             Id=regionDomainModel.Id,
@@ -73,16 +74,16 @@ public class RegionController : ControllerBase
     }
     [HttpPut]
     [Route("{id:Guid}")]
-    public IActionResult Update([FromRoute] Guid id,[FromBody] UpdateRegionRequestDto updateRegionRequestDto){
+    public async Task<IActionResult> Update([FromRoute] Guid id,[FromBody] UpdateRegionRequestDto updateRegionRequestDto){
     //Check if region exits
-    var regionDomainModel=dbContext.Regions.FirstOrDefault(x=>x.Id==id);
+    var regionDomainModel=await dbContext.Regions.FirstOrDefaultAsync(x=>x.Id==id);
     if(regionDomainModel==null){
         return NotFound();
     }
     regionDomainModel.Code=updateRegionRequestDto.Code;
     regionDomainModel.Name=updateRegionRequestDto.Name;
     regionDomainModel.RegionImageUrl=updateRegionRequestDto.RegionImageUrl;
-    dbContext.SaveChanges();
+    await dbContext.SaveChangesAsync();
     //Map domain mdoel back to DTO
     var regionDto=new RegionDto{
         Id=regionDomainModel.Id,
@@ -94,13 +95,13 @@ public class RegionController : ControllerBase
     }
     [HttpDelete]
     [Route("{id:Guid}")]
-    public IActionResult Delete([FromRoute] Guid id){
-    var regionDomainModel=dbContext.Regions.FirstOrDefault(x=>x.Id==id);
+    public async Task <IActionResult> Delete([FromRoute] Guid id){
+    var regionDomainModel= await dbContext.Regions.FirstOrDefaultAsync(x=>x.Id==id);
     if(regionDomainModel==null)
         return NotFound();
     dbContext.Regions.Remove(regionDomainModel);
-    dbContext.SaveChanges();
-        //Map domain mdoel back to DTO
+    await dbContext.SaveChangesAsync();
+    //Map domain mdoel back to DTO
     var regionDto=new RegionDto{
         Id=regionDomainModel.Id,
         Code=regionDomainModel.Code,

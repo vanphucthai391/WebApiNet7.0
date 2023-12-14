@@ -1490,11 +1490,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "d:\\thaivanphuc\\Git_web\\WebApiNet7.0\\WebApiNet7.0.csproj",
+      "projectUniqueName": "D:\\thaivanphuc\\Git_web\\WebApiNet7.0\\WebApiNet7.0.csproj",
       "projectName": "WebApiNet7.0",
-      "projectPath": "d:\\thaivanphuc\\Git_web\\WebApiNet7.0\\WebApiNet7.0.csproj",
+      "projectPath": "D:\\thaivanphuc\\Git_web\\WebApiNet7.0\\WebApiNet7.0.csproj",
       "packagesPath": "C:\\Users\\0121002536\\.nuget\\packages\\",
-      "outputPath": "d:\\thaivanphuc\\Git_web\\WebApiNet7.0\\obj\\",
+      "outputPath": "D:\\thaivanphuc\\Git_web\\WebApiNet7.0\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
